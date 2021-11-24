@@ -3,6 +3,9 @@ import './App.css';
 import {TaskType, Todolist} from './Todolist';
 import {v1} from "uuid";
 import {AddItemForm} from "./AddItemForm";
+import {AppBar, Button, Container, Grid, IconButton, Paper, Toolbar, Typography} from "@material-ui/core";
+import {Menu} from "@material-ui/icons";
+import "@fontsource/roboto";
 
 export type FilterValuesType = "all" | "active" | "completed"
 
@@ -106,7 +109,10 @@ function App() {
             tasksForRender = tasks[tl.id].filter(t => t.isDone === true)
         }
 
-        return <Todolist
+        return (
+            <Grid item>
+        <Paper elevation={8} style={{padding: "20px"}}>
+        <Todolist
             key={tl.id}
             id={tl.id}
             title={tl.title}
@@ -120,12 +126,31 @@ function App() {
             changeTasksTitle={changeTasksTitle}
             changeTodolistTitle={changeTodolistTitle}
         />
+        </Paper>
+            </Grid>)
     })
 
     return (
         <div className="App">
+            <AppBar position="static">
+                <Toolbar style={{justifyContent: "space-between"}}>
+                    <IconButton edge="start" color="inherit" aria-label="menu">
+                        <Menu/>
+                    </IconButton>
+                    <Typography variant="h6">
+                        Todolists
+                    </Typography>
+                    <Button color="inherit" variant={"outlined"}>Login</Button>
+                </Toolbar>
+            </AppBar>
+            <Container fixed>
+                <Grid container style={{padding: "29px 0"}}>
             <AddItemForm addItem={addTodolist}/>
+                </Grid>
+                <Grid container spacing={4}>
             {todoListsComponents}
+                </Grid>
+            </Container>
         </div>
     );
 }
