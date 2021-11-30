@@ -1,17 +1,7 @@
-import {ActionType, calculator, sum} from "./reducer";
+import {ActionType, calculator} from "./reducer";
 
 
-test("sum", ()=>{
-    // 1.Тестовые данные
-    const num1 = 10
-    const num2 = 12
 
-    //2.Выполнение тестируемого кода
-    const result = sum(num1, num2)
-
-    //3. Сравнение с ожидаемым результатом
-    expect(result).toBe(22)
-})
 
 test("sum of calculator", ()=>{
     // 1.Тестовые данные

@@ -1,0 +1,60 @@
+import {FilterValuesType, TodolistType} from "../App";
+import {v1} from "uuid";
+
+export type ActionsType = RemoveTodoListAT | AddTodoListAT | ChangeTodolistTitleAT | ChangeTodoListFilter
+
+type RemoveTodoListAT = {
+    type: "REMOVE-TODOLIST",
+    id: string
+}
+
+type AddTodoListAT = {
+    type: 'ADD-TODOLIST',
+    title: string
+}
+
+type ChangeTodolistTitleAT = {
+    type: 'CHANGE-TODOLIST-TITLE',
+    id: string,
+    title: string
+}
+
+type ChangeTodoListFilter = {
+    type: 'CHANGE-TODOLIST-FILTER',
+    id: string,
+    filter: FilterValuesType
+}
+
+export const todoListsReducer = (todolists: Array<TodolistType>, action: ActionsType): Array<TodolistType> => {
+    switch (action.type) {
+        case "REMOVE-TODOLIST":
+            return todolists.filter(tl => tl.id !== action.id)
+        case "ADD-TODOLIST":
+            const TodoListID = v1()
+            const newTodolist: TodolistType = {
+                id: TodoListID,
+                title: action.title,
+                filter: 'all'
+            }
+            return [...todolists, newTodolist]
+        case "CHANGE-TODOLIST-TITLE":
+            return todolists.map(tl => tl.id === action.id ? {...tl, title: action.title} : tl)
+        case "CHANGE-TODOLIST-FILTER":
+            return todolists.map(tl => tl.id === action.id ? {...tl, filter: action.filter} : tl)
+        default:
+            return todolists
+    }
+}
+export const RemoveTodolistAC = (todolistId: string): RemoveTodoListAT => {
+    return { type: 'REMOVE-TODOLIST', id: todolistId}
+}
+export const AddTodoListAC = (title: string): AddTodoListAT => {
+    return { type: 'ADD-TODOLIST', title: title}
+}
+
+export const ChangeTodolistTitleAC = (todolistId: string, title: string): ChangeTodolistTitleAT => {
+    return { type: 'CHANGE-TODOLIST-TITLE', id: todolistId, title: title}
+}
+export const ChangeTodoListFilterAC = (todolistId: string, filter: FilterValuesType): ChangeTodoListFilter => {
+    return { type: 'CHANGE-TODOLIST-FILTER', id: todolistId, filter: filter}
+}

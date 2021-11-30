@@ -9,7 +9,7 @@ import "@fontsource/roboto";
 
 export type FilterValuesType = "all" | "active" | "completed"
 
-type TodolistType = {
+export type TodolistType = {
     id: string,
     title: string,
     filter: FilterValuesType
@@ -60,7 +60,6 @@ function App() {
         tasks[todoListID] = tasks[todoListID].filter(t => t.id !== taskID)
         setTasks({...tasks})
     }
-
     const changeFilter = (filter: FilterValuesType, todoListID: string) => {
         setTodolists(todolists.map(tl => tl.id === todoListID ? {...tl, filter} : tl))
     }
@@ -80,7 +79,6 @@ function App() {
             [todoListID]: tasks[todoListID].map(t => t.id === taskID ? {...t, title} : t)
         })
     }
-
     const removeTodolist = (todoListID: string) => {
         setTodolists(todolists.filter(tl => tl.id !== todoListID))
         delete tasks[todoListID]
