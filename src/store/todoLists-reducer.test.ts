@@ -1,5 +1,4 @@
 import {
-    ActionsType,
     AddTodoListAC, ChangeTodoListFilterAC,
     ChangeTodolistTitleAC,
     RemoveTodolistAC,
