@@ -88,3 +88,4 @@ export function getBanknoteList(amountOfMoney: number): Array<number> {
     }
     return result
 }
+
