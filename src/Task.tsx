@@ -9,9 +9,10 @@ export type TaskPropsType = {
     removeTask: (taskID: string) => void,
     changeTaskStatus: (taskID: string, isDone: boolean) => void,
     changeTasksTitle: (taskID: string, title: string) => void,
+    todolistId: string
 }
 
-export const Task = React.memo(({task, removeTask , changeTaskStatus, changeTasksTitle}: TaskPropsType) => {
+export const Task = React.memo(({task, removeTask , changeTaskStatus, changeTasksTitle, todolistId}: TaskPropsType) => {
 
     const onClickHandler = () => removeTask(task.id)
     const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => changeTaskStatus(task.id, e.currentTarget.checked)

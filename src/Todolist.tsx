@@ -1,4 +1,4 @@
-import React, {ChangeEvent, ChangeEventHandler, KeyboardEvent, useCallback, useState} from 'react';
+import React, {useCallback} from 'react';
 import {FilterValuesType} from "./App";
 import {AddItemForm} from "./AddItemForm";
 import {EditableSpan} from "./EditableSpan";
@@ -50,7 +50,7 @@ export const Todolist = React.memo((props: TodolistPropsType) => {
     }, [props.changeTasksTitle, props.id])
 
     const tasksJSXElements = tasksForRender.map(task => {
-        return <Task task={task} removeTask={removeTask} changeTaskStatus={changeTaskStatus} changeTasksTitle={changeTaskTitle} />
+        return <Task task={task} removeTask={removeTask} changeTaskStatus={changeTaskStatus} changeTasksTitle={changeTaskTitle} todolistId={props.id}/>
     })
 
 
