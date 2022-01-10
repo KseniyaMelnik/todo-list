@@ -35,7 +35,7 @@ type TodoType= {
     title: string
 }
 
-export type ResponseType<D = {}> = {
+type ResponseType<D = {}> = {
     resultCode: number
     messages: Array<string>
     fieldsErrors: Array<string>
