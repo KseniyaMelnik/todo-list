@@ -1,22 +1,13 @@
 import React, {useEffect, useState} from 'react'
-
-import {todolistAPI} from "../api/todolist-api";
 import {tasksAPI} from "../api/task-api";
 export default {
     title: 'API'
 }
 
-const settings = {
-    withCredentials: true,
-    headers: {
-        'API-KEY': '22f8a0e5-ae9d-464b-9c50-12afa6acaa39'
-    }
-}
-
 export const GetTasks = () => {
     const [state, setState] = useState<any>(null)
     useEffect(() => {
-        const todoID = "d2b89f75-573a-4e4e-8b28-5091973920e9"
+        const todoID = "70dd39ad-a565-4ba3-ad17-cc219bea0a4e"
         tasksAPI.getTask(todoID)
             .then((res) => {
                 setState(res.data);
@@ -31,7 +22,7 @@ export const CreateTask = () => {
     const [state, setState] = useState<any>(null)
     useEffect(() => {
         const title = "New Task"
-        const todolistId = "d2b89f75-573a-4e4e-8b28-5091973920e9"
+        const todolistId = "70dd39ad-a565-4ba3-ad17-cc219bea0a4e"
         tasksAPI.createTask(todolistId, title)
             .then( (res) => {
             setState(res.data);
@@ -45,8 +36,8 @@ export const DeleteTask = () => {
     const [state, setState] = useState<any>(null)
     useEffect(() => {
 
-        const todolistId = 'd2b89f75-573a-4e4e-8b28-5091973920e9';
-        const taskId = 'a7bbfefc-c358-432e-8cb9-a9296a1403a5'
+        const todolistId = '70dd39ad-a565-4ba3-ad17-cc219bea0a4e';
+        const taskId = 'eefce6c3-b0af-4050-9cca-924bf50291e6'
         tasksAPI.deleteTask(todolistId, taskId)
             .then( (res) => {
             setState(res.data);
@@ -60,9 +51,9 @@ export const UpdateTaskTitle = () => {
     const [state, setState] = useState<any>(null)
     useEffect(() => {
 
-        const todolistId = 'd2b89f75-573a-4e4e-8b28-5091973920e9'
-        const taskId = '2a5f2837-b0cf-4eea-ae69-15977ba13cb5'
-        tasksAPI.updateTask(todolistId, taskId, 'JS')
+        const todolistId = '70dd39ad-a565-4ba3-ad17-cc219bea0a4e'
+        const taskId = '8cd4f5bb-3d9f-48e1-a9b7-f63d77000bfd'
+        tasksAPI.updateTask(todolistId, taskId, 'new task for third todo')
             .then((res) => {
                 setState(res.data)
             })
