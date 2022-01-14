@@ -1,16 +1,14 @@
-import React, {useCallback} from 'react';
-import {FilterValuesType} from "./App";
+import React, {useCallback, useEffect} from 'react';
+import {FilterValuesType} from "./store/todoLists-reducer";
 import {AddItemForm} from "./AddItemForm";
 import {EditableSpan} from "./EditableSpan";
 import {Button, ButtonGroup, Checkbox, IconButton, List, ListItem, Typography} from "@material-ui/core";
 import {Delete} from "@material-ui/icons";
 import {Task} from "./Task";
+import {TaskStatuses, TaskType} from "./api/todolist-api";
+import {fetchTasksTC} from "./store/tasks-reducer";
+import {useDispatch} from "react-redux";
 
-export type TaskType = {
-    id: string
-    title: string
-    isDone: boolean
-}
 
 type TodolistPropsType = {
     id: string
@@ -20,7 +18,7 @@ type TodolistPropsType = {
     removeTask: (taskID: string, todoListID: string) => void,
     changeFilter: (filter: FilterValuesType, todoListID: string) => void,
     addTask: (title: string, todoListID: string) => void,
-    changeTaskStatus: (taskID: string, isDone: boolean, todoListID: string) => void,
+    changeTaskStatus: (taskID: string, status: TaskStatuses, todoListID: string) => void,
     removeTodolist: (todoListID: string) => void
     changeTasksTitle: (taskID: string, title: string, todoListID: string) => void,
     changeTodolistTitle: (title: string, todoListID: string) => void
@@ -28,13 +26,19 @@ type TodolistPropsType = {
 }
 
 export const Todolist = React.memo((props: TodolistPropsType) => {
+    const dispatch = useDispatch();
+
+    useEffect ( () => {
+        dispatch(fetchTasksTC(props.id))
+    }, [])
+
 
     let tasksForRender: Array<TaskType> =  props.tasks;
     if (props.filter === "active") {
-        tasksForRender = tasksForRender.filter(t => t.isDone === false)
+        tasksForRender = tasksForRender.filter(t => t.status === TaskStatuses.New)
     }
     if (props.filter === "completed") {
-        tasksForRender = tasksForRender.filter(t => t.isDone === true)
+        tasksForRender = tasksForRender.filter(t => t.status === TaskStatuses.Completed)
     }
     const addTask = useCallback((title: string) => {
         props.addTask(title, props.id)
@@ -42,7 +46,7 @@ export const Todolist = React.memo((props: TodolistPropsType) => {
     const removeTask = useCallback((taskId: string)=>{
         props.removeTask(taskId, props.id)
     }, [props.removeTask, props.id])
-    const changeTaskStatus = useCallback((taskId: string, newStatus: boolean)=> {
+    const changeTaskStatus = useCallback((taskId: string, newStatus: TaskStatuses)=> {
         props.changeTaskStatus(taskId, newStatus, props.id)
     }, [props.changeTaskStatus, props.id])
     const changeTaskTitle = useCallback((taskID: string, newTitle: string )=>{

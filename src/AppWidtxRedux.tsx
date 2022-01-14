@@ -1,6 +1,6 @@
-import React, {useCallback} from 'react';
+import React, {useCallback, useEffect} from 'react';
 import './App.css';
-import {TaskType, Todolist} from './Todolist';
+import {Todolist} from './Todolist';
 import {v1} from "uuid";
 import {AddItemForm} from "./AddItemForm";
 import {AppBar, Button, Container, Grid, IconButton, Paper, Toolbar, Typography} from "@material-ui/core";
@@ -9,12 +9,20 @@ import "@fontsource/roboto";
 import {
     AddTodoListAC,
     ChangeTodoListFilterAC,
-    ChangeTodolistTitleAC,
+    ChangeTodolistTitleAC, fetchTodolistsTC,
     RemoveTodolistAC,
 } from "./store/todoLists-reducer";
-import {addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC } from "./store/tasks-reducer";
+import {
+    addTaskAC,
+    addTaskTC,
+    changeTaskStatusAC,
+    changeTaskTitleAC,
+    removeTaskAC,
+    removeTasksTC, updateTaskStatusTC
+} from "./store/tasks-reducer";
 import {useDispatch, useSelector} from "react-redux";
 import {AppRootStateType} from "./store/store";
+import {TaskStatuses, TaskType} from "./api/todolist-api";
 
 export type FilterValuesType = "all" | "active" | "completed"
 
@@ -29,6 +37,11 @@ export type TasksStateType = {
 }
 
 function AppWidthRedux() {
+
+    useEffect(() => {
+        dispatch(fetchTodolistsTC())
+    }, [])
+
     //BLL:
 
     const todolists = useSelector<AppRootStateType, Array<TodolistType>>(state => state.todolists)
@@ -37,10 +50,10 @@ function AppWidthRedux() {
 
 
     const addTask = useCallback((title: string, todoListID: string) => {
-        dispatch(addTaskAC(title, todoListID))
+        dispatch(addTaskTC(todoListID, title))
     },[dispatch])
     const removeTask = useCallback((taskID: string, todoListID: string) => {
-        dispatch(removeTaskAC(taskID, todoListID))
+        dispatch(removeTasksTC(todoListID, taskID))
     }, [dispatch])
     const changeFilter = useCallback((filter: FilterValuesType, todoListID: string) => {
         dispatch(ChangeTodoListFilterAC(todoListID, filter))
@@ -49,8 +62,8 @@ function AppWidthRedux() {
         dispatch(ChangeTodolistTitleAC(todoListID, title))
     }, [dispatch])
 
-    const changeTaskStatus = useCallback((taskID: string, isDone: boolean, todoListID: string) => {
-        dispatch(changeTaskStatusAC (taskID, isDone, todoListID))
+    const changeStatus = useCallback((taskID: string, status: TaskStatuses, todoListID: string) => {
+        dispatch(updateTaskStatusTC (taskID, status, todoListID))
     }, [dispatch])
     const changeTasksTitle = useCallback((taskID: string, title: string, todoListID: string) => {
         dispatch(changeTaskTitleAC(taskID, title, todoListID))
@@ -79,7 +92,7 @@ function AppWidthRedux() {
             changeFilter={changeFilter}
             addTask={addTask}
             filter={tl.filter}
-            changeTaskStatus={changeTaskStatus}
+            changeTaskStatus={changeStatus}
             removeTodolist={removeTodolist}
             changeTasksTitle={changeTasksTitle}
             changeTodolistTitle={changeTodolistTitle}

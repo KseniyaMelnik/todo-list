@@ -16,20 +16,3 @@ export default {
     }
 } as ComponentMeta<typeof Task>;
 
-// More on component templates: https://storybook.js.org/docs/react/writing-stories/introduction#using-args
-const Template: ComponentStory<typeof Task> = (args) => <Task {...args} />;
-
-export const TaskIsDoneStory = Template.bind({});
-// More on args: https://storybook.js.org/docs/react/writing-stories/args
-TaskIsDoneStory.args = {
-    task: {id: "1", isDone: true, title: "JS"},
-    todolistId: "11111"
-};
-
-export const TaskIsNotDoneStory = Template.bind({});
-// More on args: https://storybook.js.org/docs/react/writing-stories/args
-TaskIsNotDoneStory.args = {
-    task: {id: "2", isDone: false, title: "HTML"},
-    todolistId: "22222"
-};
-
