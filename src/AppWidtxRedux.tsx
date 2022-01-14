@@ -9,7 +9,7 @@ import {
     AddTodoListAC, addTodolistsTC,
     ChangeTodoListFilterAC,
     ChangeTodolistTitleAC, fetchTodolistsTC,
-    RemoveTodolistAC, removeTodolistsTC,
+    RemoveTodolistAC, removeTodolistsTC, updateTodoTitleTC,
 } from "./store/todoLists-reducer";
 import {
     addTaskAC,
@@ -58,7 +58,7 @@ function AppWidthRedux() {
         dispatch(ChangeTodoListFilterAC(todoListID, filter))
     }, [dispatch])
     const changeTodolistTitle = useCallback((title: string, todoListID: string) => {
-        dispatch(ChangeTodolistTitleAC(todoListID, title))
+        dispatch(updateTodoTitleTC(todoListID, title))
     }, [dispatch])
 
     const changeStatus = useCallback((taskID: string, status: TaskStatuses, todoListID: string) => {

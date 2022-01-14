@@ -1,8 +1,9 @@
 import {v1} from "uuid";
-import {todolistAPI, TodolistType} from "../api/todolist-api";
+import {todolistAPI, TodolistType, UpdateTaskModelType} from "../api/todolist-api";
 import {Dispatch} from "redux";
 import {tasksAPI} from "../api/task-api";
-import {removeTaskAC} from "./tasks-reducer";
+import {changeTaskTitleAC, removeTaskAC} from "./tasks-reducer";
+import {AppRootStateType} from "./store";
 
 export type ActionsType = RemoveTodoListAT
     | AddTodoListAT
@@ -109,3 +110,13 @@ export const addTodolistsTC = (title: string) => {
             })
     }
 }
+
+export const updateTodoTitleTC = (todolistId: string, title: string) => (dispatch: Dispatch) => {
+
+        todolistAPI.updateTodo(todolistId, title)
+            // const action = changeTaskStatusAC(id, status, todolistId);
+            .then(() => {
+                dispatch(ChangeTodolistTitleAC(todolistId, title))
+            })
+    }
+
