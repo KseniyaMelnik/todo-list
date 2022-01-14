@@ -1,16 +1,15 @@
 import React, {useCallback, useEffect} from 'react';
 import './App.css';
 import {Todolist} from './Todolist';
-import {v1} from "uuid";
 import {AddItemForm} from "./AddItemForm";
 import {AppBar, Button, Container, Grid, IconButton, Paper, Toolbar, Typography} from "@material-ui/core";
 import {Menu} from "@material-ui/icons";
 import "@fontsource/roboto";
 import {
-    AddTodoListAC,
+    AddTodoListAC, addTodolistsTC,
     ChangeTodoListFilterAC,
     ChangeTodolistTitleAC, fetchTodolistsTC,
-    RemoveTodolistAC,
+    RemoveTodolistAC, removeTodolistsTC,
 } from "./store/todoLists-reducer";
 import {
     addTaskAC,
@@ -69,12 +68,12 @@ function AppWidthRedux() {
         dispatch(changeTaskTitleAC(taskID, title, todoListID))
     }, [dispatch])
     const removeTodolist =useCallback((todoListID: string) => {
-        dispatch(RemoveTodolistAC(todoListID))
+        dispatch(removeTodolistsTC(todoListID))
 
     }, [dispatch])
 
     const addTodolist = useCallback((title: string) => {
-        dispatch(AddTodoListAC(title))
+        dispatch(addTodolistsTC(title))
     }, [dispatch])
 
     // UI:

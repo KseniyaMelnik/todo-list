@@ -1,6 +1,8 @@
 import {v1} from "uuid";
 import {todolistAPI, TodolistType} from "../api/todolist-api";
 import {Dispatch} from "redux";
+import {tasksAPI} from "../api/task-api";
+import {removeTaskAC} from "./tasks-reducer";
 
 export type ActionsType = RemoveTodoListAT
     | AddTodoListAT
@@ -87,6 +89,23 @@ export const fetchTodolistsTC = () => {
             .then((res) => {
                 debugger
                 dispatch(setTodolistsAC(res.data))
+            })
+    }
+}
+export const removeTodolistsTC = (todolistId: string) => {
+    return (dispatch: Dispatch) => {
+        todolistAPI.deleteTodo(todolistId)
+            .then((res) => {
+                dispatch(RemoveTodolistAC(todolistId))
+            })
+    }
+}
+
+export const addTodolistsTC = (title: string) => {
+    return (dispatch: Dispatch) => {
+        todolistAPI.createTodo(title)
+            .then((res) => {
+                dispatch(AddTodoListAC(title))
             })
     }
 }
