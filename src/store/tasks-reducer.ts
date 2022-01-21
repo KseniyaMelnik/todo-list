@@ -3,7 +3,8 @@ import {AddTodoListAT, RemoveTodoListAT, SetTodolistsActionType} from "./todoLis
 import {TaskStatuses, TaskType, UpdateTaskModelType} from "../api/todolist-api";
 import {tasksAPI} from "../api/task-api";
 import {AppRootStateType, AppThunk} from "./store";
-import {setAppStatusAC} from "./app-reducer";
+import {setAppErrorAC, setAppErrorAT, setAppStatusAC} from "./app-reducer";
+import {AxiosError} from "axios";
 
 export type TasksActionsType =
       RemoveTaskAT
@@ -14,6 +15,7 @@ export type TasksActionsType =
     | RemoveTodoListAT
     | SetTodolistsActionType
     | setTasksAT
+    | setAppErrorAT
 
 type RemoveTaskAT = {
     type: "REMOVE-TASK",
@@ -96,6 +98,12 @@ export const tasksReducer = (state= initialState, action: TasksActionsType): Tas
     }
 }
 
+enum ResponseStatusCodes {
+    success = 0,
+    error = 1,
+    captcha = 10
+}
+
 export const removeTaskAC = (taskID: string, todolistId: string): RemoveTaskAT => {
     return { type: 'REMOVE-TASK', taskID, todolistId} as const
 }
@@ -134,15 +142,28 @@ export const removeTasksTC = (todolistId: string, taskId: string):AppThunk => {
     }
 }
 
-export const addTaskTC = (todolistId:string, title:string):AppThunk => {
-    return (dispatch) => {
+export const addTaskTC = (todolistId:string, title:string):AppThunk =>
+     (dispatch) => {
         dispatch(setAppStatusAC('loading'))
         tasksAPI.createTask(todolistId, title)
-            .then((res) => {
-                dispatch(addTaskAC(res.data.data.item))
-                dispatch(setAppStatusAC('succeeded'))
+            .then(res => {
+                if (res.data.resultCode === ResponseStatusCodes.success) {
+                    const task = res.data.data.item
+                    dispatch(addTaskAC(task))
+                } else {
+                    if (res.data.messages.length) {
+                        dispatch(setAppErrorAC(res.data.messages[0]))
+                    } else {
+                        dispatch(setAppErrorAC('Some error occurred'))
+                    }
+                }
             })
-    }
+            .catch((error: AxiosError)=> {
+                dispatch(setAppErrorAC(error.message))
+            })
+            .finally(()=>{
+                dispatch(setAppStatusAC('idle'))
+            })
 }
 
 export const updateTaskStatusTC = (taskId: string, status: TaskStatuses, todoId: string):AppThunk => (dispatch, getstate: () => AppRootStateType) => {
