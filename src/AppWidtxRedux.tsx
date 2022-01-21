@@ -29,6 +29,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {AppRootStateType, useAppSelector} from "./store/store";
 import {TaskStatuses, TaskType} from "./api/todolist-api";
 import {RequestStatusType} from "./store/app-reducer";
+import {ErrorSnackbar} from "./components/ErrorSnackbar/ErrorSnackbar";
 
 export type FilterValuesType = "all" | "active" | "completed"
 
@@ -110,6 +111,7 @@ function AppWidthRedux() {
 
     return (
         <div className="App">
+            <ErrorSnackbar />
             <AppBar position="static">
                 <Toolbar style={{justifyContent: "space-between"}}>
                     <IconButton edge="start" color="inherit" aria-label="menu">
