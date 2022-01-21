@@ -1,7 +1,7 @@
 import React, {useCallback, useEffect} from 'react';
 import './App.css';
 import {Todolist} from './Todolist';
-import {AddItemForm} from "./AddItemForm";
+import {AddItemForm} from "./components/AddItemForm/AddItemForm";
 import {
     AppBar,
     Button,
@@ -19,7 +19,7 @@ import {
     addTodolistsTC,
     ChangeTodoListFilterAC,
     fetchTodolistsTC,
-    removeTodolistsTC, updateTodoTitleTC,
+    removeTodolistsTC, TodolistDomainType, updateTodoTitleTC,
 } from "./store/todoLists-reducer";
 import {
     addTaskTC,
@@ -37,6 +37,7 @@ export type TodolistType = {
     id: string,
     title: string,
     filter: FilterValuesType
+
 }
 
 export type TasksStateType = {
@@ -51,7 +52,7 @@ function AppWidthRedux() {
 
     //BLL:
 
-    const todolists = useSelector<AppRootStateType, Array<TodolistType>>(state => state.todolists)
+    const todolists = useSelector<AppRootStateType, Array<TodolistDomainType>>(state => state.todolists)
     const tasks = useSelector<AppRootStateType, TasksStateType>(state => state.tasks)
     const dispatch = useDispatch();
     const status = useAppSelector<RequestStatusType>((state)=>state.app.status)
@@ -95,6 +96,7 @@ function AppWidthRedux() {
                         key={tl.id}
                         id={tl.id}
                         title={tl.title}
+                        entityStatus={tl.entityStatus}
                         tasks={tasks[tl.id]}
                         removeTask={removeTask}
                         changeFilter={changeFilter}

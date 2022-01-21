@@ -1,6 +1,6 @@
 import React, {useCallback, useEffect} from 'react';
 import {FilterValuesType} from "./store/todoLists-reducer";
-import {AddItemForm} from "./AddItemForm";
+import {AddItemForm} from "./components/AddItemForm/AddItemForm";
 import {EditableSpan} from "./EditableSpan";
 import {Button, ButtonGroup, Checkbox, IconButton, List, ListItem, Typography} from "@material-ui/core";
 import {Delete} from "@material-ui/icons";
@@ -8,12 +8,14 @@ import {Task} from "./Task";
 import {TaskStatuses, TaskType} from "./api/todolist-api";
 import {fetchTasksTC} from "./store/tasks-reducer";
 import {useDispatch} from "react-redux";
+import {RequestStatusType} from "./store/app-reducer";
 
 
 type TodolistPropsType = {
     id: string
     title: string
     filter: FilterValuesType
+    entityStatus: RequestStatusType
     tasks: Array<TaskType>
     removeTask: (taskID: string, todoListID: string) => void,
     changeFilter: (filter: FilterValuesType, todoListID: string) => void,
@@ -81,7 +83,7 @@ export const Todolist = React.memo((props: TodolistPropsType) => {
             <EditableSpan
                 title={props.title}
                 setNewTitle={changeTodolistTitle}/>
-            <IconButton onClick={removeTodolist}>
+            <IconButton onClick={removeTodolist} disabled={props.entityStatus === 'loading'}>
                 <Delete/>
             </IconButton>
         </Typography>
