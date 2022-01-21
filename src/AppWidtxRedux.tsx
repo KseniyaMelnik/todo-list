@@ -2,26 +2,33 @@ import React, {useCallback, useEffect} from 'react';
 import './App.css';
 import {Todolist} from './Todolist';
 import {AddItemForm} from "./AddItemForm";
-import {AppBar, Button, Container, Grid, IconButton, Paper, Toolbar, Typography} from "@material-ui/core";
+import {
+    AppBar,
+    Button,
+    Container,
+    Grid,
+    IconButton,
+    LinearProgress,
+    Paper,
+    Toolbar,
+    Typography
+} from "@material-ui/core";
 import {Menu} from "@material-ui/icons";
 import "@fontsource/roboto";
 import {
-    AddTodoListAC, addTodolistsTC,
+    addTodolistsTC,
     ChangeTodoListFilterAC,
-    ChangeTodolistTitleAC, fetchTodolistsTC,
-    RemoveTodolistAC, removeTodolistsTC, updateTodoTitleTC,
+    fetchTodolistsTC,
+    removeTodolistsTC, updateTodoTitleTC,
 } from "./store/todoLists-reducer";
 import {
-    addTaskAC,
     addTaskTC,
-    changeTaskStatusAC,
-    changeTaskTitleAC,
-    removeTaskAC,
     removeTasksTC, updateTaskStatusTC, updateTaskTitleTC
 } from "./store/tasks-reducer";
 import {useDispatch, useSelector} from "react-redux";
-import {AppRootStateType} from "./store/store";
+import {AppRootStateType, useAppSelector} from "./store/store";
 import {TaskStatuses, TaskType} from "./api/todolist-api";
+import {RequestStatusType} from "./store/app-reducer";
 
 export type FilterValuesType = "all" | "active" | "completed"
 
@@ -44,13 +51,14 @@ function AppWidthRedux() {
     //BLL:
 
     const todolists = useSelector<AppRootStateType, Array<TodolistType>>(state => state.todolists)
-    const tasks = useSelector<AppRootStateType, TasksStateType> (state => state.tasks)
+    const tasks = useSelector<AppRootStateType, TasksStateType>(state => state.tasks)
     const dispatch = useDispatch();
+    const status = useAppSelector<RequestStatusType>((state)=>state.app.status)
 
 
     const addTask = useCallback((title: string, todoListID: string) => {
         dispatch(addTaskTC(todoListID, title))
-    },[dispatch])
+    }, [dispatch])
     const removeTask = useCallback((taskID: string, todoListID: string) => {
         dispatch(removeTasksTC(todoListID, taskID))
     }, [dispatch])
@@ -62,12 +70,12 @@ function AppWidthRedux() {
     }, [dispatch])
 
     const changeStatus = useCallback((taskID: string, status: TaskStatuses, todoListID: string) => {
-        dispatch(updateTaskStatusTC (taskID, status, todoListID))
+        dispatch(updateTaskStatusTC(taskID, status, todoListID))
     }, [dispatch])
     const changeTasksTitle = useCallback((taskID: string, title: string, todoListID: string) => {
         dispatch(updateTaskTitleTC(taskID, title, todoListID))
     }, [dispatch])
-    const removeTodolist =useCallback((todoListID: string) => {
+    const removeTodolist = useCallback((todoListID: string) => {
         dispatch(removeTodolistsTC(todoListID))
 
     }, [dispatch])
@@ -81,22 +89,22 @@ function AppWidthRedux() {
 
         return (
             <Grid item>
-        <Paper elevation={8} style={{padding: "20px"}}>
-        <Todolist
-            key={tl.id}
-            id={tl.id}
-            title={tl.title}
-            tasks={tasks[tl.id]}
-            removeTask={removeTask}
-            changeFilter={changeFilter}
-            addTask={addTask}
-            filter={tl.filter}
-            changeTaskStatus={changeStatus}
-            removeTodolist={removeTodolist}
-            changeTasksTitle={changeTasksTitle}
-            changeTodolistTitle={changeTodolistTitle}
-        />
-        </Paper>
+                <Paper elevation={8} style={{padding: "20px"}}>
+                    <Todolist
+                        key={tl.id}
+                        id={tl.id}
+                        title={tl.title}
+                        tasks={tasks[tl.id]}
+                        removeTask={removeTask}
+                        changeFilter={changeFilter}
+                        addTask={addTask}
+                        filter={tl.filter}
+                        changeTaskStatus={changeStatus}
+                        removeTodolist={removeTodolist}
+                        changeTasksTitle={changeTasksTitle}
+                        changeTodolistTitle={changeTodolistTitle}
+                    />
+                </Paper>
             </Grid>)
     })
 
@@ -112,13 +120,14 @@ function AppWidthRedux() {
                     </Typography>
                     <Button color="inherit" variant={"outlined"}>Login</Button>
                 </Toolbar>
+                {status === 'loading' &&  <LinearProgress color={'secondary'}/>}
             </AppBar>
             <Container fixed>
                 <Grid container style={{padding: "29px 0"}}>
-            <AddItemForm addItem={addTodolist}/>
+                    <AddItemForm addItem={addTodolist}/>
                 </Grid>
                 <Grid container spacing={4}>
-            {todoListsComponents}
+                    {todoListsComponents}
                 </Grid>
             </Container>
         </div>

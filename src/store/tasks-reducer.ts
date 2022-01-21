@@ -3,6 +3,7 @@ import {AddTodoListAT, RemoveTodoListAT, SetTodolistsActionType} from "./todoLis
 import {TaskStatuses, TaskType, UpdateTaskModelType} from "../api/todolist-api";
 import {tasksAPI} from "../api/task-api";
 import {AppRootStateType, AppThunk} from "./store";
+import {setAppStatusAC} from "./app-reducer";
 
 export type TasksActionsType =
       RemoveTaskAT
@@ -124,18 +125,22 @@ export const fetchTasksTC = (todolistId: string):AppThunk => {
 
 export const removeTasksTC = (todolistId: string, taskId: string):AppThunk => {
     return (dispatch) => {
+        dispatch(setAppStatusAC('loading'))
         tasksAPI.deleteTask(todolistId, taskId)
             .then((res) => {
                 dispatch(removeTaskAC(taskId, todolistId))
+                dispatch(setAppStatusAC('succeeded'))
             })
     }
 }
 
 export const addTaskTC = (todolistId:string, title:string):AppThunk => {
     return (dispatch) => {
+        dispatch(setAppStatusAC('loading'))
         tasksAPI.createTask(todolistId, title)
             .then((res) => {
                 dispatch(addTaskAC(res.data.data.item))
+                dispatch(setAppStatusAC('succeeded'))
             })
     }
 }
@@ -158,11 +163,12 @@ export const updateTaskStatusTC = (taskId: string, status: TaskStatuses, todoId:
             startDate: currentTask.startDate,
             deadline: currentTask.deadline
         }
-
+        dispatch(setAppStatusAC('loading'))
         tasksAPI.updateTask(todoId, taskId, model)
             // const action = changeTaskStatusAC(id, status, todolistId);
             .then(() => {
                 dispatch(changeTaskStatusAC(taskId, status, todoId))
+                dispatch(setAppStatusAC('succeeded'))
             })
     }
 }
@@ -184,11 +190,12 @@ export const updateTaskTitleTC = (taskId: string, title: string, todoId: string)
             startDate: currentTask.startDate,
             deadline: currentTask.deadline
         }
-
+        dispatch(setAppStatusAC('loading'))
         tasksAPI.updateTask(todoId, taskId, model)
             // const action = changeTaskStatusAC(id, status, todolistId);
             .then(() => {
                 dispatch(changeTaskTitleAC(taskId, title, todoId))
+                dispatch(setAppStatusAC('succeeded'))
             })
     }
 }
