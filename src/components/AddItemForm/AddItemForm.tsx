@@ -4,6 +4,7 @@ import {AddBox} from "@material-ui/icons";
 
 type AddItemFormPropsType = {
     addItem: (title: string) => void
+    disabled?: boolean
 }
 
 export const AddItemForm = React.memo((props: AddItemFormPropsType) => {
@@ -47,11 +48,13 @@ export const AddItemForm = React.memo((props: AddItemFormPropsType) => {
                 onKeyPress={onKeyPressHandler}
                 label={"Title"}
                 helperText={errorMessage}
+                disabled={props.disabled}
             />
             <IconButton
                 onClick={addItem}
                 color={"primary"}
                 size={"small"}
+                disabled={props.disabled}
             >
                 <AddBox fontSize={"large"}/>
             </IconButton>

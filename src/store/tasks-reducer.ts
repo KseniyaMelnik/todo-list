@@ -1,4 +1,4 @@
-import {TasksStateType} from "../AppWidtxRedux";
+import {TasksStateType} from "../App/AppWidtxRedux";
 import {AddTodoListAT, RemoveTodoListAT, SetTodolistsActionType} from "./todoLists-reducer";
 import {TaskStatuses, TaskType, UpdateTaskModelType} from "../api/todolist-api";
 import {tasksAPI} from "../api/task-api";
@@ -187,9 +187,22 @@ export const updateTaskStatusTC = (taskId: string, status: TaskStatuses, todoId:
         dispatch(setAppStatusAC('loading'))
         tasksAPI.updateTask(todoId, taskId, model)
             // const action = changeTaskStatusAC(id, status, todolistId);
-            .then(() => {
-                dispatch(changeTaskStatusAC(taskId, status, todoId))
-                dispatch(setAppStatusAC('succeeded'))
+            .then((res) => {
+                if (res.data.resultCode === ResponseStatusCodes.success) {
+                    dispatch(changeTaskStatusAC(taskId, status, todoId))
+                } else {
+                    if (res.data.messages.length) {
+                        dispatch(setAppErrorAC(res.data.messages[0]))
+                    } else {
+                        dispatch(setAppErrorAC('Some error occurred'))
+                    }
+                }
+            })
+            .catch((error: AxiosError)=> {
+                dispatch(setAppErrorAC(error.message))
+            })
+            .finally(()=>{
+                dispatch(setAppStatusAC('idle'))
             })
     }
 }
