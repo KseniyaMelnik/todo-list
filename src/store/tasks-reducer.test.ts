@@ -9,14 +9,14 @@ let startState: TasksStateType
 beforeEach( ()=> {
      startState = {
         "todolistId1": [
-            { id: "1", title: "CSS", status: TaskStatuses.New, priority: TaskPriorities.Low, startDate: '01.01.2021', deadline: '31.12.2022', addedDate: '02.01.2021', description: 'it is test', order: 1, todoListId: "todolistId1" },
-            { id: "2", title: "JS", status: TaskStatuses.New, priority: TaskPriorities.Low, startDate: '01.01.2021', deadline: '31.12.2022', addedDate: '02.01.2021', description: 'it is test', order: 1, todoListId: "todolistId1" },
-            { id: "3", title: "React", status: TaskStatuses.New, priority: TaskPriorities.Low, startDate: '01.01.2021', deadline: '31.12.2022', addedDate: '02.01.2021', description: 'it is test', order: 1, todoListId: "todolistId1" }
+            { id: "1", title: "CSS", status: TaskStatuses.New, priority: TaskPriorities.Low, startDate: '01.01.2021', deadline: '31.12.2022', addedDate: '02.01.2021', description: 'it is test', order: 1, todoListId: "todolistId1", entityStatus: "idle" },
+            { id: "2", title: "JS", status: TaskStatuses.New, priority: TaskPriorities.Low, startDate: '01.01.2021', deadline: '31.12.2022', addedDate: '02.01.2021', description: 'it is test', order: 1, todoListId: "todolistId1", entityStatus: "idle" },
+            { id: "3", title: "React", status: TaskStatuses.New, priority: TaskPriorities.Low, startDate: '01.01.2021', deadline: '31.12.2022', addedDate: '02.01.2021', description: 'it is test', order: 1, todoListId: "todolistId1", entityStatus: "idle" }
         ],
         "todolistId2": [
-            { id: "1", title: "bread", status: TaskStatuses.New, priority: TaskPriorities.Low, startDate: '01.01.2021', deadline: '31.12.2022', addedDate: '02.01.2021', description: 'it is test', order: 1, todoListId: "todolistId2" },
-            { id: "2", title: "milk", status: TaskStatuses.New, priority: TaskPriorities.Low, startDate: '01.01.2021', deadline: '31.12.2022', addedDate: '02.01.2021', description: 'it is test', order: 1, todoListId: "todolistId2" },
-            { id: "3", title: "tea", status: TaskStatuses.New, priority: TaskPriorities.Low, startDate: '01.01.2021', deadline: '31.12.2022', addedDate: '02.01.2021', description: 'it is test', order: 1, todoListId: "todolistId2" }
+            { id: "1", title: "bread", status: TaskStatuses.New, priority: TaskPriorities.Low, startDate: '01.01.2021', deadline: '31.12.2022', addedDate: '02.01.2021', description: 'it is test', order: 1, todoListId: "todolistId2", entityStatus: "idle" },
+            { id: "2", title: "milk", status: TaskStatuses.New, priority: TaskPriorities.Low, startDate: '01.01.2021', deadline: '31.12.2022', addedDate: '02.01.2021', description: 'it is test', order: 1, todoListId: "todolistId2", entityStatus: "idle" },
+            { id: "3", title: "tea", status: TaskStatuses.New, priority: TaskPriorities.Low, startDate: '01.01.2021', deadline: '31.12.2022', addedDate: '02.01.2021', description: 'it is test', order: 1, todoListId: "todolistId2", entityStatus: "idle" }
         ]
     };
 
@@ -30,13 +30,13 @@ test('correct task should be deleted from correct array', () => {
 
     expect(endState).toEqual({
         "todolistId1": [
-            { id: "1", title: "CSS", status: TaskStatuses.New, priority: TaskPriorities.Low, startDate: '01.01.2021', deadline: '31.12.2022', addedDate: '02.01.2021', description: 'it is test', order: 1, todoListId: "todolistId1" },
-            { id: "2", title: "JS", status: TaskStatuses.New, priority: TaskPriorities.Low, startDate: '01.01.2021', deadline: '31.12.2022', addedDate: '02.01.2021', description: 'it is test', order: 1, todoListId: "todolistId1" },
-            { id: "3", title: "React", status: TaskStatuses.New, priority: TaskPriorities.Low, startDate: '01.01.2021', deadline: '31.12.2022', addedDate: '02.01.2021', description: 'it is test', order: 1, todoListId: "todolistId1" }
+            { id: "1", title: "CSS", status: TaskStatuses.New, priority: TaskPriorities.Low, startDate: '01.01.2021', deadline: '31.12.2022', addedDate: '02.01.2021', description: 'it is test', order: 1, todoListId: "todolistId1", entityStatus: "idle" },
+            { id: "2", title: "JS", status: TaskStatuses.New, priority: TaskPriorities.Low, startDate: '01.01.2021', deadline: '31.12.2022', addedDate: '02.01.2021', description: 'it is test', order: 1, todoListId: "todolistId1", entityStatus: "idle" },
+            { id: "3", title: "React", status: TaskStatuses.New, priority: TaskPriorities.Low, startDate: '01.01.2021', deadline: '31.12.2022', addedDate: '02.01.2021', description: 'it is test', order: 1, todoListId: "todolistId1", entityStatus: "idle" }
         ],
         "todolistId2": [
-            { id: "1", title: "bread", status: TaskStatuses.New, priority: TaskPriorities.Low, startDate: '01.01.2021', deadline: '31.12.2022', addedDate: '02.01.2021', description: 'it is test', order: 1, todoListId: "todolistId2" },
-            { id: "3", title: "tea", status: TaskStatuses.New, priority: TaskPriorities.Low, startDate: '01.01.2021', deadline: '31.12.2022', addedDate: '02.01.2021', description: 'it is test', order: 1, todoListId: "todolistId2" }
+            { id: "1", title: "bread", status: TaskStatuses.New, priority: TaskPriorities.Low, startDate: '01.01.2021', deadline: '31.12.2022', addedDate: '02.01.2021', description: 'it is test', order: 1, todoListId: "todolistId2", entityStatus: "idle" },
+            { id: "3", title: "tea", status: TaskStatuses.New, priority: TaskPriorities.Low, startDate: '01.01.2021', deadline: '31.12.2022', addedDate: '02.01.2021', description: 'it is test', order: 1, todoListId: "todolistId2", entityStatus: "idle" }
         ]
     });
 
@@ -65,14 +65,14 @@ test('status of specified task should be changed', () => {
     expect(endState["todolistId2"][1].status).toBe(TaskStatuses.InProgress);
     expect(endState).toEqual({
         "todolistId1": [
-            { id: "1", title: "CSS", status: TaskStatuses.New, priority: TaskPriorities.Low, startDate: '01.01.2021', deadline: '31.12.2022', addedDate: '02.01.2021', description: 'it is test', order: 1, todoListId: "todolistId1" },
-            { id: "2", title: "JS", status: TaskStatuses.New, priority: TaskPriorities.Low, startDate: '01.01.2021', deadline: '31.12.2022', addedDate: '02.01.2021', description: 'it is test', order: 1, todoListId: "todolistId1" },
-            { id: "3", title: "React", status: TaskStatuses.New, priority: TaskPriorities.Low, startDate: '01.01.2021', deadline: '31.12.2022', addedDate: '02.01.2021', description: 'it is test', order: 1, todoListId: "todolistId1" }
+            { id: "1", title: "CSS", status: TaskStatuses.New, priority: TaskPriorities.Low, startDate: '01.01.2021', deadline: '31.12.2022', addedDate: '02.01.2021', description: 'it is test', order: 1, todoListId: "todolistId1", entityStatus: "idle" },
+            { id: "2", title: "JS", status: TaskStatuses.New, priority: TaskPriorities.Low, startDate: '01.01.2021', deadline: '31.12.2022', addedDate: '02.01.2021', description: 'it is test', order: 1, todoListId: "todolistId1", entityStatus: "idle" },
+            { id: "3", title: "React", status: TaskStatuses.New, priority: TaskPriorities.Low, startDate: '01.01.2021', deadline: '31.12.2022', addedDate: '02.01.2021', description: 'it is test', order: 1, todoListId: "todolistId1", entityStatus: "idle" }
         ],
         "todolistId2": [
-            { id: "1", title: "bread", status: TaskStatuses.New, priority: TaskPriorities.Low, startDate: '01.01.2021', deadline: '31.12.2022', addedDate: '02.01.2021', description: 'it is test', order: 1, todoListId: "todolistId2" },
-            { id: "2", title: "milk", status: TaskStatuses.InProgress, priority: TaskPriorities.Low, startDate: '01.01.2021', deadline: '31.12.2022', addedDate: '02.01.2021', description: 'it is test', order: 1, todoListId: "todolistId2" },
-            { id: "3", title: "tea", status: TaskStatuses.New, priority: TaskPriorities.Low, startDate: '01.01.2021', deadline: '31.12.2022', addedDate: '02.01.2021', description: 'it is test', order: 1, todoListId: "todolistId2" }
+            { id: "1", title: "bread", status: TaskStatuses.New, priority: TaskPriorities.Low, startDate: '01.01.2021', deadline: '31.12.2022', addedDate: '02.01.2021', description: 'it is test', order: 1, todoListId: "todolistId2", entityStatus: "idle" },
+            { id: "2", title: "milk", status: TaskStatuses.InProgress, priority: TaskPriorities.Low, startDate: '01.01.2021', deadline: '31.12.2022', addedDate: '02.01.2021', description: 'it is test', order: 1, todoListId: "todolistId2", entityStatus: "idle" },
+            { id: "3", title: "tea", status: TaskStatuses.New, priority: TaskPriorities.Low, startDate: '01.01.2021', deadline: '31.12.2022', addedDate: '02.01.2021', description: 'it is test', order: 1, todoListId: "todolistId2", entityStatus: "idle" }
         ]
     });
 });

@@ -23,7 +23,7 @@ import {
 } from "../store/todoLists-reducer";
 import {
     addTaskTC,
-    removeTasksTC, updateTaskStatusTC, updateTaskTitleTC
+    removeTasksTC, TaskDomainType, updateTaskStatusTC, updateTaskTitleTC
 } from "../store/tasks-reducer";
 import {useDispatch, useSelector} from "react-redux";
 import {AppRootStateType, useAppSelector} from "../store/store";
@@ -41,8 +41,9 @@ export type TodolistType = {
 }
 
 export type TasksStateType = {
-    [key: string]: Array<TaskType>
+    [key: string]: Array<TaskDomainType>
 }
+
 
 function AppWidthRedux() {
 

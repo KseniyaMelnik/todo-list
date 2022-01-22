@@ -6,7 +6,7 @@ import {Button, ButtonGroup, Checkbox, IconButton, List, ListItem, Typography} f
 import {Delete} from "@material-ui/icons";
 import {Task} from "../Task/Task";
 import {TaskStatuses, TaskType} from "../../api/todolist-api";
-import {fetchTasksTC} from "../../store/tasks-reducer";
+import {fetchTasksTC, TaskDomainType} from "../../store/tasks-reducer";
 import {useDispatch} from "react-redux";
 import {RequestStatusType} from "../../store/app-reducer";
 
@@ -16,7 +16,7 @@ type TodolistPropsType = {
     title: string
     filter: FilterValuesType
     entityStatus: RequestStatusType
-    tasks: Array<TaskType>
+    tasks: Array<TaskDomainType>
     removeTask: (taskID: string, todoListID: string) => void,
     changeFilter: (filter: FilterValuesType, todoListID: string) => void,
     addTask: (title: string, todoListID: string) => void,
@@ -35,7 +35,7 @@ export const Todolist = React.memo((props: TodolistPropsType) => {
     }, [])
 
 
-    let tasksForRender: Array<TaskType> =  props.tasks;
+    let tasksForRender: Array<TaskDomainType> =  props.tasks;
     if (props.filter === "active") {
         tasksForRender = tasksForRender.filter(t => t.status === TaskStatuses.New)
     }
