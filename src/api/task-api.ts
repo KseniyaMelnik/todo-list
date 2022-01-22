@@ -1,5 +1,5 @@
 import axios, {AxiosResponse} from 'axios'
-import {UpdateTaskModelType} from "./todolist-api";
+import {ResponseType, UpdateTaskModelType} from "./todolist-api";
 
 const instance = axios.create({
     baseURL: 'https://social-network.samuraijs.com/api/1.1/',
@@ -49,8 +49,8 @@ type TaskType= {
     totalCount: number
 }
 
-type ResponseType<D = {}> = {
-    resultCode: number
-    messages: Array<string>
-    data: D
-}
+//  type ResponseType<D = {}> = {
+//     resultCode: number
+//     messages: Array<string>
+//     data: D
+// }

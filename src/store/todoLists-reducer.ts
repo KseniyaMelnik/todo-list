@@ -1,6 +1,9 @@
-import {todolistAPI, TodolistType} from "../api/todolist-api";
+import {TaskType, todolistAPI, TodolistType} from "../api/todolist-api";
 import {AppThunk} from "./store";
 import {RequestStatusType, setAppStatusAC, setAppStatusAT} from "./app-reducer";
+import {AxiosError} from "axios";
+import {handleServerAppError, handleServerNetworkError} from "../utils/error-utils";
+import {ResponseStatusCodes} from "./tasks-reducer";
 
 
 export type TodolistActionsType = RemoveTodoListAT
@@ -18,13 +21,13 @@ export type RemoveTodoListAT = {
 
 export type AddTodoListAT = ReturnType<typeof AddTodoListAC>
 
-type ChangeTodolistTitleAT = {
+export type ChangeTodolistTitleAT = {
     type: 'CHANGE-TODOLIST-TITLE',
     id: string,
     title: string
 }
 
-type ChangeTodoListFilterAT = {
+export type ChangeTodoListFilterAT = {
     type: 'CHANGE-TODOLIST-FILTER',
     id: string,
     filter: FilterValuesType
@@ -80,7 +83,7 @@ export const changeTodolistEntityStatusAC = (id: string, entityStatus: RequestSt
     entityStatus
 } as const)
 
-type changeTodolistEntityStatusAT = ReturnType<typeof changeTodolistEntityStatusAC>
+export type changeTodolistEntityStatusAT = ReturnType<typeof changeTodolistEntityStatusAC>
 
 export const fetchTodolistsTC = ():AppThunk  => {
     return (dispatch) => {
@@ -90,6 +93,9 @@ export const fetchTodolistsTC = ():AppThunk  => {
                 dispatch(setTodolistsAC(res.data))
                 dispatch(setAppStatusAC('succeeded'))
             })
+            .catch((error: AxiosError)=> {
+                handleServerNetworkError(error, dispatch)
+            })
     }
 }
 export const removeTodolistsTC = (todolistId: string):AppThunk => {
@@ -98,8 +104,15 @@ export const removeTodolistsTC = (todolistId: string):AppThunk => {
         dispatch(setAppStatusAC('loading'))
         todolistAPI.deleteTodo(todolistId)
             .then((res) => {
-                dispatch(setAppStatusAC('succeeded'))
-                dispatch(RemoveTodolistAC(todolistId))
+                if (res.data.resultCode === ResponseStatusCodes.success) {
+                    dispatch(setAppStatusAC('succeeded'))
+                    dispatch(RemoveTodolistAC(todolistId))
+                }else {
+                    handleServerAppError(res.data, dispatch)
+                }
+            })
+            .catch((error: AxiosError)=> {
+                handleServerNetworkError(error, dispatch)
             })
     }
 }
@@ -109,8 +122,15 @@ export const addTodolistsTC = (title: string):AppThunk => {
         dispatch(setAppStatusAC('loading'))
         todolistAPI.createTodo(title)
             .then((res) => {
-                dispatch(AddTodoListAC(res.data.data.item))
-                dispatch(setAppStatusAC('succeeded'))
+                if (res.data.resultCode === ResponseStatusCodes.success) {
+                    dispatch(AddTodoListAC(res.data.data.item))
+                    dispatch(setAppStatusAC('succeeded'))
+                } else {
+                    handleServerAppError<{item: TodolistType}>(res.data, dispatch)
+                }
+            })
+            .catch((error: AxiosError)=> {
+                handleServerNetworkError(error, dispatch)
             })
     }
 }
@@ -120,9 +140,16 @@ export const updateTodoTitleTC = (todolistId: string, title: string):AppThunk =>
         dispatch(setAppStatusAC('loading'))
         todolistAPI.updateTodo(todolistId, title)
             // const action = changeTaskStatusAC(id, status, todolistId);
-            .then(() => {
-                dispatch(ChangeTodolistTitleAC(todolistId, title))
-                dispatch(setAppStatusAC('succeeded'))
+            .then((res) => {
+                if (res.data.resultCode === ResponseStatusCodes.success) {
+                    dispatch(ChangeTodolistTitleAC(todolistId, title))
+                    dispatch(setAppStatusAC('succeeded'))
+                } else {
+                    handleServerAppError(res.data, dispatch)
+                }
+            })
+            .catch((error: AxiosError)=> {
+                handleServerNetworkError(error, dispatch)
             })
     }
 }
