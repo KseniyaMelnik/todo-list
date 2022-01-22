@@ -156,6 +156,7 @@ export const fetchTasksTC = (todolistId: string):AppThunk => {
 export const removeTasksTC = (todolistId: string, taskId: string):AppThunk => {
     return (dispatch) => {
         dispatch(setAppStatusAC('loading'))
+        dispatch(changeTaskEntityStatusAC(todolistId, taskId, 'loading'))
         tasksAPI.deleteTask(todolistId, taskId)
             .then((res) => {
                 if (res.data.resultCode === ResponseStatusCodes.success) {
@@ -210,11 +211,13 @@ export const updateTaskStatusTC = (taskId: string, status: TaskStatuses, todoId:
             deadline: currentTask.deadline
         }
         dispatch(setAppStatusAC('loading'))
+        dispatch(changeTaskEntityStatusAC(todoId, taskId, 'loading'))
         tasksAPI.updateTask(todoId, taskId, model)
             // const action = changeTaskStatusAC(id, status, todolistId);
             .then((res) => {
                 if (res.data.resultCode === ResponseStatusCodes.success) {
                     dispatch(changeTaskStatusAC(taskId, status, todoId))
+                    dispatch(changeTaskEntityStatusAC(todoId, taskId, 'idle'))
                 } else {
                     handleServerAppError<{ item: TaskType }>(res.data, dispatch)
                 }
@@ -246,10 +249,12 @@ export const updateTaskTitleTC = (taskId: string, title: string, todoId: string)
             deadline: currentTask.deadline
         }
         dispatch(setAppStatusAC('loading'))
+        dispatch(changeTaskEntityStatusAC(todoId, taskId, 'loading'))
         tasksAPI.updateTask(todoId, taskId, model)
             .then(() => {
                 dispatch(changeTaskTitleAC(taskId, title, todoId))
                 dispatch(setAppStatusAC('succeeded'))
+                dispatch(changeTaskEntityStatusAC(todoId, taskId, 'idle'))
             })
             .catch((error: AxiosError)=> {
                 handleServerNetworkError(error, dispatch)
