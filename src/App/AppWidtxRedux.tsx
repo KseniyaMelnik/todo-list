@@ -30,6 +30,9 @@ import {AppRootStateType, useAppSelector} from "../store/store";
 import {TaskStatuses, TaskType} from "../api/todolist-api";
 import {RequestStatusType} from "../store/app-reducer";
 import {ErrorSnackbar} from "../components/ErrorSnackbar/ErrorSnackbar";
+import {TodolistList} from "../components/TodoListList/TodoListList";
+import {Navigate, Route, Routes} from "react-router-dom";
+import {Login} from "../components/Login/Login";
 
 export type FilterValuesType = "all" | "active" | "completed"
 
@@ -128,12 +131,12 @@ function AppWidthRedux() {
                 {status === 'loading' &&  <LinearProgress color={'secondary'}/>}
             </AppBar>
             <Container fixed>
-                <Grid container style={{padding: "29px 0"}}>
-                    <AddItemForm addItem={addTodolist}/>
-                </Grid>
-                <Grid container spacing={4}>
-                    {todoListsComponents}
-                </Grid>
+                <Routes>
+                    <Route path={'/'} element={<TodolistList addTodolist={addTodolist} todoListsComponents={todoListsComponents}/>}/>
+                    <Route path={'/login'} element={<Login />}/>
+                    <Route path="/404" element={<h1>404: PAGE NOT FOUND</h1>}/>
+                    <Route path="*" element={<Navigate to={'404'}/>}/>
+                </Routes>
             </Container>
         </div>
     );
