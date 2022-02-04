@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState} from 'react'
 import {
     Button,
     Checkbox,
@@ -10,8 +10,14 @@ import {
     TextField
 } from "@material-ui/core";
 import {useFormik} from "formik";
+import {loginTC} from "../../store/auth-reducer";
+import {useDispatch, useSelector} from "react-redux";
+import {AppRootStateType} from "../../store/store";
+import {Navigate} from "react-router-dom";
 
 export const Login = () => {
+    const dispatch = useDispatch()
+    const isLoggedIn = useSelector<AppRootStateType, boolean>(state=>state.auth.isLoggedIn)
 
     type FormikErrorType = {
         email?: string
@@ -40,11 +46,13 @@ export const Login = () => {
             return errors;
         },
         onSubmit: values => {
-            alert(JSON.stringify(values));
+            dispatch(loginTC(values))
             formik.resetForm()
         },
     })
-
+    if (isLoggedIn) {
+        return <Navigate to={'/'} />
+    }
     return <Grid container justifyContent={'center'}>
         <Grid item justifyContent={'center'}>
             <form onSubmit={ formik.handleSubmit}>

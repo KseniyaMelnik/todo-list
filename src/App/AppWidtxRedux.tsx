@@ -4,7 +4,7 @@ import {Todolist} from './../components/Todolist/Todolist';
 import {AddItemForm} from "../components/AddItemForm/AddItemForm";
 import {
     AppBar,
-    Button,
+    Button, CircularProgress,
     Container,
     Grid,
     IconButton,
@@ -28,11 +28,12 @@ import {
 import {useDispatch, useSelector} from "react-redux";
 import {AppRootStateType, useAppSelector} from "../store/store";
 import {TaskStatuses, TaskType} from "../api/todolist-api";
-import {RequestStatusType} from "../store/app-reducer";
+import {initializeAppTC, RequestStatusType} from "../store/app-reducer";
 import {ErrorSnackbar} from "../components/ErrorSnackbar/ErrorSnackbar";
 import {TodolistList} from "../components/TodoListList/TodoListList";
 import {Navigate, Route, Routes} from "react-router-dom";
 import {Login} from "../components/Login/Login";
+import {logoutTC} from "../store/auth-reducer";
 
 export type FilterValuesType = "all" | "active" | "completed"
 
@@ -51,7 +52,7 @@ export type TasksStateType = {
 function AppWidthRedux() {
 
     useEffect(() => {
-        dispatch(fetchTodolistsTC())
+        dispatch(initializeAppTC())
     }, [])
 
     //BLL:
@@ -60,7 +61,8 @@ function AppWidthRedux() {
     const tasks = useSelector<AppRootStateType, TasksStateType>(state => state.tasks)
     const dispatch = useDispatch();
     const status = useAppSelector<RequestStatusType>((state)=>state.app.status)
-
+    const isInitialized = useAppSelector<boolean>(state=> state.app.isInitialized)
+    const isLoggedIn = useAppSelector<boolean>(state=> state.auth.isLoggedIn)
 
     const addTask = useCallback((title: string, todoListID: string) => {
         dispatch(addTaskTC(todoListID, title))
@@ -89,6 +91,10 @@ function AppWidthRedux() {
     const addTodolist = useCallback((title: string) => {
         dispatch(addTodolistsTC(title))
     }, [dispatch])
+    const Logout = ()=> {
+        dispatch(logoutTC())
+    }
+
 
     // UI:
     const todoListsComponents = todolists.map(tl => {
@@ -114,7 +120,12 @@ function AppWidthRedux() {
                 </Paper>
             </Grid>)
     })
-
+    if (!isInitialized) {
+        return <div
+            style={{position: 'fixed', top: '30%', textAlign: 'center', width: '100%'}}>
+            <CircularProgress/>
+        </div>
+    }
     return (
         <div className="App">
             <ErrorSnackbar />
@@ -126,7 +137,7 @@ function AppWidthRedux() {
                     <Typography variant="h6">
                         Todolists
                     </Typography>
-                    <Button color="inherit" variant={"outlined"}>Login</Button>
+                    {isLoggedIn &&  <Button color="inherit" variant={"outlined"} onClick={Logout}>Log out</Button>}
                 </Toolbar>
                 {status === 'loading' &&  <LinearProgress color={'secondary'}/>}
             </AppBar>
