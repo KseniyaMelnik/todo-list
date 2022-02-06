@@ -1,4 +1,10 @@
-import {AddTodoListAT, RemoveTodoListAT, SetTodolistsActionType} from "./todoLists-reducer";
+import {
+    AddTodoListAC,
+    AddTodoListAT, RemoveTodolistAC,
+    RemoveTodoListAT,
+    setTodolistsAC,
+    SetTodolistsActionType
+} from "./todoLists-reducer";
 import {TaskStatuses, TaskType, UpdateTaskModelType} from "../api/todolist-api";
 import {tasksAPI} from "../api/task-api";
 import {AppRootStateType, AppThunk} from "./store";
@@ -53,17 +59,17 @@ export type TaskDomainType = TaskType & {
 
 const initialState: TasksStateType = {}
 
-export const tasksReducer = (state= initialState, action: TasksActionsType): TasksStateType => {
+export const tasksReducer = (state= initialState, action: any): TasksStateType => {
     switch (action.type) {
         case 'SET-TASKS': {
             let copyState = {...state}
-            copyState[action.todolistId] = action.tasks.map(t=> ({...t, entityStatus: 'idle'}))
+            copyState[action.todolistId] = action.tasks.map((t: any)=> ({...t, entityStatus: 'idle'}))
             return copyState
         }
 
-        case 'SET-TODOLISTS': {
+        case setTodolistsAC.type: {
             const stateCopy = {...state}
-            action.todolists.forEach((tl)=>{
+            action.payload.todolists.forEach((tl: any)=>{
                 stateCopy[tl.id] = []
             })
             return stateCopy;
@@ -94,12 +100,12 @@ export const tasksReducer = (state= initialState, action: TasksActionsType): Tas
         case "CHANGE-TASK-TITLE":
             return {...state, [action.todolistId]: state[action.todolistId]
                     .map(t => t.id === action.taskId ? {...t, title: action.title} : t) }
-        case "ADD-TODOLIST":
-            return {...state, [action.todolist.id]: []}
-        case "REMOVE-TODOLIST":
+        case AddTodoListAC.type:
+            return {...state, [action.payload.todolist.id]: []}
+        case RemoveTodolistAC.type:
             //let {[action.id]: [], ...newState1} = {...state}
             let newState = {...state}
-            delete newState[action.id]
+            delete newState[action.payload.id]
             return newState
         case "CHANGE-TASK_ENTITY-STATUS":
             return {...state, [action.todolistId]: state[action.todolistId]

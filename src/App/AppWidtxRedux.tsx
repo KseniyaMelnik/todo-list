@@ -71,7 +71,7 @@ function AppWidthRedux() {
         dispatch(removeTasksTC(todoListID, taskID))
     }, [dispatch])
     const changeFilter = useCallback((filter: FilterValuesType, todoListID: string) => {
-        dispatch(ChangeTodoListFilterAC(todoListID, filter))
+        dispatch(ChangeTodoListFilterAC({filter, todolistId: todoListID}))
     }, [dispatch])
     const changeTodolistTitle = useCallback((title: string, todoListID: string) => {
         dispatch(updateTodoTitleTC(todoListID, title))
