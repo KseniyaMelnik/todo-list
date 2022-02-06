@@ -2,9 +2,10 @@ import {AddTodoListAT, RemoveTodoListAT, SetTodolistsActionType} from "./todoLis
 import {TaskStatuses, TaskType, UpdateTaskModelType} from "../api/todolist-api";
 import {tasksAPI} from "../api/task-api";
 import {AppRootStateType, AppThunk} from "./store";
-import {RequestStatusType, setAppErrorAT, setAppStatusAC} from "./app-reducer";
+import {RequestStatusType, setAppStatusAC} from "./app-reducer";
 import {AxiosError} from "axios";
 import {handleServerAppError, handleServerNetworkError} from "../utils/error-utils";
+import {Dispatch} from "redux";
 
 export type TasksActionsType =
       RemoveTaskAT
@@ -15,7 +16,6 @@ export type TasksActionsType =
     | RemoveTodoListAT
     | SetTodolistsActionType
     | setTasksAT
-    | setAppErrorAT
     | changeTaskEntityStatusAT
 
 export type RemoveTaskAT = {
@@ -137,12 +137,12 @@ export const changeTaskEntityStatusAC = (todolistId: string, taskId: string, ent
 }
 export type changeTaskEntityStatusAT  = ReturnType<typeof changeTaskEntityStatusAC>
 
-export const fetchTasksTC = (todolistId: string):AppThunk => {
-    return (dispatch) => {
-        dispatch(setAppStatusAC('loading'))
+export const fetchTasksTC = (todolistId: string) => {
+    return (dispatch: Dispatch) => {
+        dispatch(setAppStatusAC({status: 'loading'}))
         tasksAPI.getTask(todolistId)
             .then((res) => {
-                dispatch(setAppStatusAC('succeeded'))
+                dispatch(setAppStatusAC({status: 'succeeded'}))
                 const tasks = res.data.items
                 dispatch(setTasksAC(tasks, todolistId))
             })
@@ -153,15 +153,15 @@ export const fetchTasksTC = (todolistId: string):AppThunk => {
     }
 }
 
-export const removeTasksTC = (todolistId: string, taskId: string):AppThunk => {
-    return (dispatch) => {
-        dispatch(setAppStatusAC('loading'))
+export const removeTasksTC = (todolistId: string, taskId: string) => {
+    return (dispatch: Dispatch) => {
+        dispatch(setAppStatusAC({status: 'loading'}))
         dispatch(changeTaskEntityStatusAC(todolistId, taskId, 'loading'))
         tasksAPI.deleteTask(todolistId, taskId)
             .then((res) => {
                 if (res.data.resultCode === ResponseStatusCodes.success) {
                     dispatch(removeTaskAC(taskId, todolistId))
-                    dispatch(setAppStatusAC('succeeded'))
+                    dispatch(setAppStatusAC({status: 'succeeded'}))
                 } else {
                     handleServerAppError(res.data, dispatch)
                 }
@@ -172,9 +172,9 @@ export const removeTasksTC = (todolistId: string, taskId: string):AppThunk => {
     }
 }
 
-export const addTaskTC = (todolistId:string, title:string):AppThunk =>
-     (dispatch) => {
-        dispatch(setAppStatusAC('loading'))
+export const addTaskTC = (todolistId:string, title:string) =>
+     (dispatch: Dispatch) => {
+        dispatch(setAppStatusAC({status: 'loading'}))
         tasksAPI.createTask(todolistId, title)
             .then(res => {
                 if (res.data.resultCode === ResponseStatusCodes.success) {
@@ -188,11 +188,11 @@ export const addTaskTC = (todolistId:string, title:string):AppThunk =>
                 handleServerNetworkError(error, dispatch)
             })
             .finally(()=>{
-                dispatch(setAppStatusAC('idle'))
+                dispatch(setAppStatusAC({status: 'idle'}))
             })
 }
 
-export const updateTaskStatusTC = (taskId: string, status: TaskStatuses, todoId: string):AppThunk => (dispatch, getstate: () => AppRootStateType) => {
+export const updateTaskStatusTC = (taskId: string, status: TaskStatuses, todoId: string) => (dispatch: Dispatch, getstate: () => AppRootStateType) => {
 
     const appState = getstate()
     const tasksApp = appState.tasks
@@ -210,7 +210,7 @@ export const updateTaskStatusTC = (taskId: string, status: TaskStatuses, todoId:
             startDate: currentTask.startDate,
             deadline: currentTask.deadline
         }
-        dispatch(setAppStatusAC('loading'))
+        dispatch(setAppStatusAC({status: "loading"}))
         dispatch(changeTaskEntityStatusAC(todoId, taskId, 'loading'))
         tasksAPI.updateTask(todoId, taskId, model)
             // const action = changeTaskStatusAC(id, status, todolistId);
@@ -226,11 +226,11 @@ export const updateTaskStatusTC = (taskId: string, status: TaskStatuses, todoId:
                 handleServerNetworkError(error, dispatch)
             })
             .finally(()=>{
-                dispatch(setAppStatusAC('idle'))
+                dispatch(setAppStatusAC({status: 'idle'}))
             })
     }
 }
-export const updateTaskTitleTC = (taskId: string, title: string, todoId: string):AppThunk => (dispatch, getstate: () => AppRootStateType) => {
+export const updateTaskTitleTC = (taskId: string, title: string, todoId: string) => (dispatch: Dispatch, getstate: () => AppRootStateType) => {
 
     const appState = getstate()
     const tasksApp = appState.tasks
@@ -248,12 +248,12 @@ export const updateTaskTitleTC = (taskId: string, title: string, todoId: string)
             startDate: currentTask.startDate,
             deadline: currentTask.deadline
         }
-        dispatch(setAppStatusAC('loading'))
+        dispatch(setAppStatusAC({status: 'loading'}))
         dispatch(changeTaskEntityStatusAC(todoId, taskId, 'loading'))
         tasksAPI.updateTask(todoId, taskId, model)
             .then(() => {
                 dispatch(changeTaskTitleAC(taskId, title, todoId))
-                dispatch(setAppStatusAC('succeeded'))
+                dispatch(setAppStatusAC({status: 'succeeded'}))
                 dispatch(changeTaskEntityStatusAC(todoId, taskId, 'idle'))
             })
             .catch((error: AxiosError)=> {
