@@ -7,32 +7,6 @@ import {Dispatch} from "redux";
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 
 
-export type TodolistActionsType = RemoveTodoListAT
-    | AddTodoListAT
-    | ChangeTodolistTitleAT
-    | ChangeTodoListFilterAT
-    | SetTodolistsActionType
-    | changeTodolistEntityStatusAT
-
-export type RemoveTodoListAT = {
-    type: "REMOVE-TODOLIST",
-    id: string
-}
-
-export type AddTodoListAT = ReturnType<typeof AddTodoListAC>
-
-export type ChangeTodolistTitleAT = {
-    type: 'CHANGE-TODOLIST-TITLE',
-    id: string,
-    title: string
-}
-
-export type ChangeTodoListFilterAT = {
-    type: 'CHANGE-TODOLIST-FILTER',
-    id: string,
-    filter: FilterValuesType
-}
-export type SetTodolistsActionType = ReturnType<typeof setTodolistsAC>
 
 const initialState:Array<TodolistDomainType> = []
 
