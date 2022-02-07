@@ -10,10 +10,9 @@ import {
     TodolistDomainType
 } from "../store/todoLists-reducer";
 import {TasksStateType} from "../App/AppWidtxRedux";
-import {AddTaskAT, ChangeTaskStatusAT, ChangeTaskTitleAT, RemoveTaskAT, setTasksAT} from "../store/tasks-reducer";
 
 // generic function
-export const handleServerAppError = <T>(data: ResponseType<T>, dispatch: ThunkDispatch<EmptyObject & { app: InitialStateType; todolists: Array<TodolistDomainType>; tasks: TasksStateType }, unknown, RemoveTaskAT | AddTaskAT | ChangeTaskStatusAT | ChangeTaskTitleAT | AddTodoListAT | RemoveTodoListAT | SetTodolistsActionType | setTasksAT  | ChangeTodolistTitleAT | ChangeTodoListFilterAT  | changeTodolistEntityStatusAT | any>) => {
+export const handleServerAppError = <T>(data: ResponseType<T>, dispatch: ThunkDispatch<EmptyObject & { app: InitialStateType; todolists: Array<TodolistDomainType>; tasks: TasksStateType }, unknown, AddTodoListAT | RemoveTodoListAT | SetTodolistsActionType | ChangeTodolistTitleAT | ChangeTodoListFilterAT  | changeTodolistEntityStatusAT | any>) => {
     if (data.messages.length) {
         dispatch(setAppErrorAC({error: data.messages[0]}))
     } else {
