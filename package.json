@@ -30,6 +30,7 @@
     "uuid": "^8.3.2",
     "web-vitals": "^1.0.1"
   },
+  "homepage": "https://KseniyaMelnik.github.io/todo-list",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
@@ -38,7 +39,9 @@
     "storybook": "start-storybook -p 9009",
     "build-storybook": "build-storybook -s public",
     "jest:integration": "jest -c integration/jest.config.js",
-    "test:integration": "start-server-and-test storybook http-get://localhost:9009 jest:integration"
+    "test:integration": "start-server-and-test storybook http-get://localhost:9009 jest:integration",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": [
@@ -75,6 +78,7 @@
     "@storybook/node-logger": "^6.4.9",
     "@storybook/preset-create-react-app": "^3.2.0",
     "@storybook/react": "^6.4.9",
+    "gh-pages": "^3.2.3",
     "jest-image-snapshot": "^4.5.1",
     "jest-puppeteer": "^6.0.3",
     "puppeteer": "^13.0.1",
