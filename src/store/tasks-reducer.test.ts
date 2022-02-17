@@ -24,7 +24,7 @@ beforeEach( ()=> {
 
 test('correct task should be deleted from correct array', () => {
 
-    const action = removeTaskAC("2", "todolistId2");
+    const action = removeTaskAC( {taskID: "2", todolistId: "todolistId2"});
 
     const endState = tasksReducer(startState, action)
 
@@ -57,7 +57,7 @@ test('correct task should be added to correct array', () => {
 
 test('status of specified task should be changed', () => {
 
-    const action = changeTaskStatusAC("2", TaskStatuses.InProgress, "todolistId2");
+    const action = changeTaskStatusAC({taskId: "2", status: TaskStatuses.InProgress, todolistId: "todolistId2"});
 
     const endState = tasksReducer(startState, action)
 
@@ -79,7 +79,7 @@ test('status of specified task should be changed', () => {
 
 test('title of specified task should be changed', () => {
 
-    const action = changeTaskTitleAC("2", "beer", "todolistId2");
+    const action = changeTaskTitleAC({taskId: "2", title: "beer", todolistId: "todolistId2"});
 
     const endState = tasksReducer(startState, action)
 
@@ -90,7 +90,7 @@ test('title of specified task should be changed', () => {
 
 test('new array should be added when new todolist is added', () => {
 
-    const action = AddTodoListAC({id: "todolistId3", title: "new todolist", addedDate: "01.02.2021", order: 1});
+    const action = AddTodoListAC({todolist: {id: "todolistId3", title: "new todolist", addedDate: "01.02.2021", order: 1}});
 
     const endState = tasksReducer(startState, action)
 
@@ -108,7 +108,7 @@ test('new array should be added when new todolist is added', () => {
 
 test('property with todolistId should be deleted', () => {
 
-    const action = RemoveTodolistAC("todolistId2");
+    const action = RemoveTodolistAC({todolistId: "todolistId2"});
 
     const endState = tasksReducer(startState, action)
 

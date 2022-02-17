@@ -31,13 +31,13 @@ const slice = createSlice({
         },
         removeTaskAC(state, action: PayloadAction<{taskID: string, todolistId: string}>){
             const tasks = state[action.payload.todolistId];
-            const index = tasks.findIndex(t => t.id !== action.payload.taskID);
+            const index = tasks.findIndex(t => t.id === action.payload.taskID);
             if (index > -1){
                 tasks.splice(index, 1);
             }
         },
-        addTaskAC(state, action: PayloadAction<{task: TaskType}>){
-            state[action.payload.task.todoListId].unshift({...action.payload.task, entityStatus: 'idle'})
+        addTaskAC(state, action: PayloadAction<TaskType>){
+            state[action.payload.todoListId].unshift({...action.payload, entityStatus: 'idle'})
         },
         changeTaskTitleAC(state, action: PayloadAction<{taskId: string, title: string, todolistId: string}>){
             const tasks = state[action.payload.todolistId];
@@ -127,7 +127,7 @@ export const addTaskTC = (todolistId:string, title:string) =>
             .then(res => {
                 if (res.data.resultCode === ResponseStatusCodes.success) {
                     const task = res.data.data.item
-                    dispatch(addTaskAC({task}))
+                    dispatch(addTaskAC(task))
                 } else {
                     handleServerAppError<{item:TaskType}>(res.data, dispatch)
                 }
