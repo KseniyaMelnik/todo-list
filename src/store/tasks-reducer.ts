@@ -37,8 +37,8 @@ export const removeTasksTC = createAsyncThunk('tasks/removeTask', (param: {todol
     thunkApi.dispatch(changeTaskEntityStatusAC({taskId: param.taskId, entityStatus: "loading", todolistId: param.todolistId}))
     return tasksAPI.deleteTask(param.todolistId, param.taskId)
         .then((res) => {
+            thunkApi.dispatch(setAppStatusAC({status: 'succeeded'}))
                 return {taskID: param.taskId, todolistId: param.todolistId}
-                thunkApi.dispatch(setAppStatusAC({status: 'succeeded'}))
         })
 })
 
