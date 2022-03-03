@@ -28,7 +28,8 @@
     "redux-thunk": "^2.4.1",
     "typescript": "^4.1.2",
     "uuid": "^8.3.2",
-    "web-vitals": "^1.0.1"
+    "web-vitals": "^1.0.1",
+    "webpack": "4.44.2"
   },
   "homepage": "https://KseniyaMelnik.github.io/todo-list",
   "scripts": {
