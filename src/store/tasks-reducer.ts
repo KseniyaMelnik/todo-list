@@ -32,17 +32,22 @@ export const fetchTasksTC = createAsyncThunk('tasks/fetchTasks', (todolistId: st
         })
 })
 
+export const removeTasksTC = createAsyncThunk('tasks/removeTask', (param: {todolistId: string, taskId: string}, thunkApi)=>{
+    thunkApi.dispatch(setAppStatusAC({status: 'loading'}))
+    thunkApi.dispatch(changeTaskEntityStatusAC({taskId: param.taskId, entityStatus: "loading", todolistId: param.todolistId}))
+    return tasksAPI.deleteTask(param.todolistId, param.taskId)
+        .then((res) => {
+                return {taskID: param.taskId, todolistId: param.todolistId}
+                thunkApi.dispatch(setAppStatusAC({status: 'succeeded'}))
+        })
+})
+
+
+
 const slice = createSlice({
     name: "tasks",
     initialState: initialState,
     reducers: {
-        removeTaskAC(state, action: PayloadAction<{taskID: string, todolistId: string}>){
-            const tasks = state[action.payload.todolistId];
-            const index = tasks.findIndex(t => t.id === action.payload.taskID);
-            if (index > -1){
-                tasks.splice(index, 1);
-            }
-        },
         addTaskAC(state, action: PayloadAction<TaskType>){
             state[action.payload.todoListId].unshift({...action.payload, entityStatus: 'idle'})
         },
@@ -84,10 +89,17 @@ const slice = createSlice({
             state[action.payload.todolistId] = action.payload.tasks.map((t => ({...t, entityStatus: 'idle'})))
 
         })
+        builder.addCase(removeTasksTC.fulfilled, (state, action) => {
+            const tasks = state[action.payload.todolistId];
+            const index = tasks.findIndex(t => t.id === action.payload.taskID);
+            if (index > -1){
+                tasks.splice(index, 1);
+            }
+        })
     }
 })
 
-export const {removeTaskAC, addTaskAC, changeTaskTitleAC, changeTaskStatusAC, changeTaskEntityStatusAC} = slice.actions
+export const { addTaskAC, changeTaskTitleAC, changeTaskStatusAC, changeTaskEntityStatusAC} = slice.actions
 export const tasksReducer = slice.reducer
 
 export enum ResponseStatusCodes {
@@ -96,24 +108,6 @@ export enum ResponseStatusCodes {
     captcha = 10
 }
 
-export const removeTasksTC = (todolistId: string, taskId: string) => {
-    return (dispatch: Dispatch) => {
-        dispatch(setAppStatusAC({status: 'loading'}))
-        dispatch(changeTaskEntityStatusAC({taskId, entityStatus: "loading", todolistId}))
-        tasksAPI.deleteTask(todolistId, taskId)
-            .then((res) => {
-                if (res.data.resultCode === ResponseStatusCodes.success) {
-                    dispatch(removeTaskAC({taskID: taskId, todolistId}))
-                    dispatch(setAppStatusAC({status: 'succeeded'}))
-                } else {
-                    handleServerAppError(res.data, dispatch)
-                }
-            })
-            .catch((error: AxiosError)=> {
-            handleServerNetworkError(error, dispatch)
-        })
-    }
-}
 
 export const addTaskTC = (todolistId:string, title:string) =>
      (dispatch: Dispatch) => {
