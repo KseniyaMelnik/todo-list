@@ -9,14 +9,20 @@ import {
     Grid,
     TextField
 } from "@material-ui/core";
-import {useFormik} from "formik";
+import {FormikHelpers, useFormik} from "formik";
 import {loginTC} from "../../store/auth-reducer";
 import {useDispatch, useSelector} from "react-redux";
-import {AppRootStateType} from "../../store/store";
+import {AppDispatchType, AppRootStateType, useAppDispatch} from "../../store/store";
 import {Navigate} from "react-router-dom";
 
+type FormValuesTypes = {
+    email: string,
+    password: string,
+    rememberMe: boolean
+}
+
 export const Login = () => {
-    const dispatch = useDispatch()
+    const dispatch = useAppDispatch()
     const isLoggedIn = useSelector<AppRootStateType, boolean>(state=>state.auth.isLoggedIn)
 
     type FormikErrorType = {
@@ -45,9 +51,15 @@ export const Login = () => {
             }
             return errors;
         },
-        onSubmit: values => {
-            dispatch(loginTC(values))
-            formik.resetForm()
+        onSubmit: async (values, formikHelpers:FormikHelpers<FormValuesTypes>) => {
+            const action = await dispatch(loginTC(values))
+           if (loginTC.rejected.match(action)) {
+               if (action.payload?.fieldsErrors?.length){
+                   const error = action.payload?.fieldsErrors[0]
+                   formikHelpers.setFieldError(error.field, error.error)
+               }
+            }
+          //  formik.resetForm()
         },
     })
     if (isLoggedIn) {

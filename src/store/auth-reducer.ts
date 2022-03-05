@@ -1,10 +1,10 @@
 import { Dispatch } from 'redux'
 import { setAppStatusAC } from './app-reducer'
-import {authAPI} from "../api/todolist-api";
+import {authAPI, FieldsErrorsType} from "../api/todolist-api";
 import {handleServerAppError, handleServerNetworkError} from "../utils/error-utils";
 import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
 
-export const loginTC = createAsyncThunk('auth/login', async (param: any, thunkAPI)=>{
+export const loginTC = createAsyncThunk<{isLoggedIn: boolean}, any, {rejectValue: {errors: Array<string>, fieldsErrors?: Array<FieldsErrorsType>}} >('auth/login', async (param, thunkAPI)=>{
     thunkAPI.dispatch(setAppStatusAC({status: 'loading'}))
      try {
         const res = await authAPI.login(param)
@@ -13,12 +13,12 @@ export const loginTC = createAsyncThunk('auth/login', async (param: any, thunkAP
                 return {isLoggedIn: true}
             } else {
                 handleServerAppError(res.data, thunkAPI.dispatch);
-                return {isLoggedIn: false}
+                return thunkAPI.rejectWithValue({errors: res.data.messages, fieldsErrors: res.data.fieldsErrors})
             }
         }
         catch(error: any) {
         handleServerNetworkError(error, thunkAPI.dispatch)
-            return {isLoggedIn: false}
+            return thunkAPI.rejectWithValue({errors: error.message, fieldsErrors: undefined})
     }
 })
 
