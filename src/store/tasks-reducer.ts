@@ -22,14 +22,12 @@ export type TaskDomainType = TaskType & {
 
 const initialState: TasksStateType = {}
 
-export const fetchTasksTC = createAsyncThunk('tasks/fetchTasks', (todolistId: string, thunkApi)=>{
+export const fetchTasksTC = createAsyncThunk('tasks/fetchTasks', async (todolistId: string, thunkApi)=>{
     thunkApi.dispatch(setAppStatusAC({status: 'loading'}))
-    return tasksAPI.getTask(todolistId)
-        .then((res) => {
+    const res = await tasksAPI.getTask(todolistId)
             const tasks = res.data.items
             thunkApi.dispatch(setAppStatusAC({status: 'succeeded'}))
             return {tasks, todolistId}
-        })
 })
 
 export const removeTasksTC = createAsyncThunk('tasks/removeTask', (param: {todolistId: string, taskId: string}, thunkApi)=>{
