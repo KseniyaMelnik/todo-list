@@ -1,4 +1,4 @@
-import {addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC, tasksReducer} from './tasks-reducer';
+import {addTaskAC, changeTaskStatusAC, changeTaskTitleAC, tasksReducer} from './tasks-reducer';
 import {TasksStateType} from './../App/AppWidtxRedux';
 import {AddTodoListAC, RemoveTodolistAC} from "./todoLists-reducer";
 import {TaskPriorities, TaskStatuses} from "../api/todolist-api";
@@ -21,26 +21,6 @@ beforeEach( ()=> {
     };
 
 })
-
-test('correct task should be deleted from correct array', () => {
-
-    const action = removeTaskAC( {taskID: "2", todolistId: "todolistId2"});
-
-    const endState = tasksReducer(startState, action)
-
-    expect(endState).toEqual({
-        "todolistId1": [
-            { id: "1", title: "CSS", status: TaskStatuses.New, priority: TaskPriorities.Low, startDate: '01.01.2021', deadline: '31.12.2022', addedDate: '02.01.2021', description: 'it is test', order: 1, todoListId: "todolistId1", entityStatus: "idle" },
-            { id: "2", title: "JS", status: TaskStatuses.New, priority: TaskPriorities.Low, startDate: '01.01.2021', deadline: '31.12.2022', addedDate: '02.01.2021', description: 'it is test', order: 1, todoListId: "todolistId1", entityStatus: "idle" },
-            { id: "3", title: "React", status: TaskStatuses.New, priority: TaskPriorities.Low, startDate: '01.01.2021', deadline: '31.12.2022', addedDate: '02.01.2021', description: 'it is test', order: 1, todoListId: "todolistId1", entityStatus: "idle" }
-        ],
-        "todolistId2": [
-            { id: "1", title: "bread", status: TaskStatuses.New, priority: TaskPriorities.Low, startDate: '01.01.2021', deadline: '31.12.2022', addedDate: '02.01.2021', description: 'it is test', order: 1, todoListId: "todolistId2", entityStatus: "idle" },
-            { id: "3", title: "tea", status: TaskStatuses.New, priority: TaskPriorities.Low, startDate: '01.01.2021', deadline: '31.12.2022', addedDate: '02.01.2021', description: 'it is test', order: 1, todoListId: "todolistId2", entityStatus: "idle" }
-        ]
-    });
-
-});
 
 
 test('correct task should be added to correct array', () => {
